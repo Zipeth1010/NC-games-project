@@ -1,6 +1,6 @@
 const express = require("express");
 const {getCategories} = require("./Controllers/categories_controllers");
-const { handle404Errors } = require("./Controllers/error_handiling_controller");
+const { handle404Errors } = require("./error_handiling_controller");
 const db = require("./db/connection")
 
 const app = express();
