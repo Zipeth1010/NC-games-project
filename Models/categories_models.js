@@ -2,7 +2,7 @@ const db = require("../db/connection")
 
 function getCategoriesModel() {
     return db.query(`
-    SELECT slug, description FROM categories`)
+    SELECT * FROM categories`)
     .then((result) => {
         return result.rows;
     })
