@@ -30,6 +30,27 @@ describe("GET /api/categories", () => {
     })
 })
 
+describe.only("GET /api/reviews/:review_id", () => {
+    test("200: Will return an object corresponding to the review ID with all info", () => {
+        return request(app)
+        .get("/api/reviews/2")
+        .expect(200)
+        .then(({body}) => {
+            expect(body).toBeInstanceOf(Object)
+            expect(body.review_id).toBe(2)
+            expect(body.title).toBe('Jenga')
+        })
+    })
+    test("404: Will return a '404: ID not found' when requesting an ID that doesnt exist", () => {
+        return request(app)
+        .get("/api/reviews/16")
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe("ID not found")
+        })
+    })
+})
+
 describe("GET /*", () => {
     test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
         return request(app)
