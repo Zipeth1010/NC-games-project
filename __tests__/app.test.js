@@ -30,14 +30,14 @@ describe("GET /api/categories", () => {
     })
 })
 
-// describe("GET /*", () => {
-//     test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
-//         return request(app)
-//         .get("/api/catigories")
-//         .expect(404)
-//         .then(({body}) => {
-//             expect(body.msg).toBe('Path not found')
-//         })
-//     })
-// })
+describe("GET /*", () => {
+    test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
+        return request(app)
+        .get("/api/categoriesss")
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('Path not found')
+        })
+    })
+})
 
