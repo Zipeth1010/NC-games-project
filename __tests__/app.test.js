@@ -18,9 +18,9 @@ describe("GET /api/categories", () => {
         .get("/api/categories")
         .expect(200)
         .then(({body}) => {
-            expect(body).toBeInstanceOf(Array)
-            expect(body).toHaveLength(4)
-            body.forEach((game) => {
+            expect(body.categories).toBeInstanceOf(Array)
+            expect(body.categories).toHaveLength(4)
+            body.categories.forEach((game) => {
                 expect(game).toMatchObject({
                     slug: expect.any(String),
                     description: expect.any(String)
