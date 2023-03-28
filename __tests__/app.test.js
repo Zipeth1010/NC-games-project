@@ -30,6 +30,36 @@ describe("GET /api/categories", () => {
     })
 })
 
+describe("GET /api/reviews/:review_id", () => {
+    test("200: Will return an object corresponding to the review ID with all info", () => {
+        return request(app)
+        .get("/api/reviews/2")
+        .expect(200)
+        .then(({body}) => {
+            expect(body.review).toBeInstanceOf(Object)
+            expect(body.review.review_id).toBe(2)
+            expect(body.review.title).toBe('Jenga')
+        })
+    })
+    test("404: Will return a '404: ID not found' when requesting an ID that doesnt exist", () => {
+        return request(app)
+        .get("/api/reviews/16")
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe("ID not found")
+        })
+    })
+    test("400: Will return a 400: 'Bad request' if a request is made with a non-number", () => {
+        return request(app)
+        .get("/api/reviews/not-a-number")
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Bad request")
+        })
+    })
+
+})
+
 describe("GET /*", () => {
     test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
         return request(app)
