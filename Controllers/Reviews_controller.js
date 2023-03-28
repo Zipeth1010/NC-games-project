@@ -14,7 +14,6 @@ function getReviewById (req, res, next) {
 
 function getReviews(req, res, next) {
     getReviewsModel().then((reviews) => {
-        console.log(reviews)
         res.status(200).send({reviews: reviews})
     })
     .catch((err) => {
