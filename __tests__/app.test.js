@@ -3,6 +3,7 @@ const {app} = require("../app")
 const db = require("../db/connection")
 const testData = require("../db/data/test-data")
 const seed = require("../db/seeds/seed")
+const toBeSortedBy = require("jest-sorted")
 
 beforeEach(() => {
     return seed(testData)
@@ -57,7 +58,40 @@ describe("GET /api/reviews/:review_id", () => {
             expect(body.msg).toBe("Bad request")
         })
     })
+})
 
+describe("GET api/reviews", () => {
+    test("200: Returns an array with owner, title, review_id, category, review_img_url, created_at, votes, designer & comment count properties", () => {
+        return request(app)
+        .get("/api/reviews")
+        .expect(200)
+        .then(({body}) => {
+            expect(body.reviews).toBeInstanceOf(Array)
+            expect(body.reviews).toHaveLength(13)
+            body.reviews.forEach((review) => {
+                expect(review).toMatchObject({
+                    owner: expect.any(String),
+                    title: expect.any(String),
+                    review_id: expect.any(Number),
+                    category: expect.any(String),
+                    review_img_url: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    designer: expect.any(String),
+                    comment_count: expect.any(String)
+                })
+            })
+        })
+    })
+    test("Check to see if the output of the request is sorted via date", () => {
+        return request(app)
+        .get("/api/reviews")
+        .expect(200)
+        .then(({body}) => {
+            expect(body.reviews).toBeSortedBy('created_at', {
+                descending: true
+            })})
+    })
 })
 
 describe("GET /*", () => {
