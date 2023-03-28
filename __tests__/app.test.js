@@ -36,9 +36,9 @@ describe("GET /api/reviews/:review_id", () => {
         .get("/api/reviews/2")
         .expect(200)
         .then(({body}) => {
-            expect(body).toBeInstanceOf(Object)
-            expect(body.review_id).toBe(2)
-            expect(body.title).toBe('Jenga')
+            expect(body.review).toBeInstanceOf(Object)
+            expect(body.review.review_id).toBe(2)
+            expect(body.review.title).toBe('Jenga')
         })
     })
     test("404: Will return a '404: ID not found' when requesting an ID that doesnt exist", () => {
