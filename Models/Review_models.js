@@ -21,4 +21,17 @@ function getReviewsModel() {
         return result.rows
     })
 }
-module.exports = {getReviewByIdModel, getReviewsModel}
+
+function updateVotesModel(review_id, votesToAdd) {
+    return db.query(`
+    UPDATE reviews
+    SET
+    votes = votes + $1
+    WHERE review_id = $2
+    RETURNING *;`, [votesToAdd, review_id])
+    .then((results) => {
+        return results.rows
+    })
+}
+
+module.exports = {getReviewByIdModel, getReviewsModel, updateVotesModel}
