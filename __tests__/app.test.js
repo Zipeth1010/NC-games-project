@@ -210,15 +210,15 @@ describe("POST /api/reviews/:review_id/comments", () => {
 })
 
 describe("PATCH /api/reviews/:review_id", () => {
-    test("201: Object updated when given the right parameters", () => {
+    test("200: Object updated when given the right parameters", () => {
         return request(app)
         .patch("/api/reviews/2")
         .send({
             inc_votes: 4
         })
-        .expect(201)
+        .expect(200)
         .then(({body}) => {
-            expect(body.updatedVotes).toEqual({
+            expect(body.updatedReview).toEqual({
                 review_id: 2,
                 title: "Jenga",
                 category: "dexterity",

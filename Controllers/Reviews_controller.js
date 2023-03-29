@@ -26,11 +26,11 @@ function updateVotes(req, res, next) {
     const {review_id} = req.params
     const votesToAdd = req.body["inc_votes"]
 
-    updateVotesModel(review_id, votesToAdd).then((updatedObj) => {
-        if (updatedObj.length === 0){
+    updateVotesModel(review_id, votesToAdd).then((updatedReview) => {
+        if (updatedReview.length === 0){
             return checkIfIdExists(review_id)
         }
-        res.status(201).send({updatedVotes: updatedObj[0]})
+        res.status(200).send({updatedReview: updatedReview[0]})
     })
     .catch((err) => {
         next(err)
