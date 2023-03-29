@@ -140,6 +140,76 @@ describe("GET /api/reviews/:review_id/comments", () => {
   })
 });
 
+describe("POST /api/reviews/:review_id/comments", () => {
+    test("201: Correctly posts a comment under the specified review_id", () => {
+        return request(app)
+        .post("/api/reviews/2/comments")
+        .send({
+            username: "bainesface",
+            body: "This is an example comment to see if this test works."
+        })
+        .expect(201)
+        .then(({body}) => {
+            expect(body.comment).toMatchObject({
+                body: "This is an example comment to see if this test works.",
+                votes: 0,
+                author: "bainesface",
+                review_id: 2,
+                created_at: expect.any(String)
+            })
+        })
+    })
+    test("400: if path is formatted incorrectly", () => {
+        return request(app)
+        .post("/api/reviews/wrong-path/comments")
+        .send({
+            username: "bainesface",
+            body: "This is an example comment to see if this test works."
+        })
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Bad request")
+        })
+    })
+    test("404: Username doesn't exist if given a username which doesn't match users in the users records", () => {
+        return request(app)
+        .post("/api/reviews/2/comments")
+        .send({
+            username: "Mark",
+            body: "This should produce a 400 status code"
+        })
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe("Username not found")
+        })
+    })
+    test("404: if path is formatted correctly but it is an invalid review_id", () => {
+        return request(app)
+        .post("/api/reviews/28/comments")
+        .send({
+            username: "bainesface",
+            body: "This is an example comment to see if this test works."
+        })
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe("ID not found")
+        })
+    })
+    test("400: Bad request if req object has no body", () => {
+        return request(app)
+        .post("/api/reviews/2/comments")
+        .send({
+            username: "bainesface",
+            body: null,
+        })
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("There is no body")
+        })
+    })
+})
+
+
 describe("GET /*", () => {
   test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
     return request(app)

@@ -1,7 +1,8 @@
 const db = require("../db/connection")
+const format = require('pg-format')
+
 
 function getCommentByIdModel(review_id) {
-    console.log("in the model")
     return db.query(`
     SELECT * FROM comments
     WHERE review_id = $1;`, [review_id])
@@ -20,4 +21,21 @@ function checkIfIdExists(review_id){
     })
 }
 
-module.exports = {getCommentByIdModel, checkIfIdExists}
+function insertComment(username, body, review_id) {
+    if (body === null){
+        return Promise.reject({status: 400, msg: "There is no body"})
+    }
+    return db.query(`
+    INSERT INTO comments
+    (author, body, review_id)
+    VALUES
+    ($1, $2, $3)
+    RETURNING *;`, [username, body, review_id])
+    .then((result) => {
+        console.log(result)
+        return result.rows[0]
+    })
+}
+
+
+module.exports = {getCommentByIdModel, checkIfIdExists, insertComment}
