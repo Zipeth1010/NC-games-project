@@ -2,7 +2,7 @@ const express = require("express");
 const {getCategories} = require("./Controllers/categories_controllers");
 const {getReviewById, getReviews} = require("./Controllers/Reviews_controller")
 const db = require("./db/connection");
-const { handle400Errors, handleCustomErrors, handle404Errors } = require("./error_handlers");
+const { handle400Errors, handleCustomErrors, handlePSQLErrors } = require("./error_handlers");
 const {getCommentById, postCommentById} = require("./Controllers/comments_controller")
 
 const app = express();
@@ -24,7 +24,7 @@ app.use("/*", (req, res) => {
 })
 
 app.use(handle400Errors)
-app.use(handle404Errors)
+app.use(handlePSQLErrors)
 app.use(handleCustomErrors)
 
 

@@ -22,9 +22,6 @@ function checkIfIdExists(review_id){
 }
 
 function insertComment(username, body, review_id) {
-    if (body === null){
-        return Promise.reject({status: 400, msg: "There is no body"})
-    }
     return db.query(`
     INSERT INTO comments
     (author, body, review_id)
