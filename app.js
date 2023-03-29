@@ -4,6 +4,7 @@ const {getReviewById, getReviews} = require("./Controllers/Reviews_controller")
 const db = require("./db/connection");
 const { handle400Errors, handleCustomErrors, handlePSQLErrors } = require("./error_handlers");
 const {getCommentById, postCommentById} = require("./Controllers/comments_controller")
+const {updateVotes} = require("./Controllers/Reviews_controller")
 
 const app = express();
 
@@ -18,6 +19,8 @@ app.get("/api/reviews", getReviews)
 app.get("/api/reviews/:review_id/comments", getCommentById)
 
 app.post("/api/reviews/:review_id/comments", postCommentById)
+
+app.patch("/api/reviews/:review_id", updateVotes)
 
 app.use("/*", (req, res) => {
     res.status(404).send({msg: "Path not found"})

@@ -209,6 +209,63 @@ describe("POST /api/reviews/:review_id/comments", () => {
     })
 })
 
+describe("PATCH /api/reviews/:review_id", () => {
+    test("200: Object updated when given the right parameters", () => {
+        return request(app)
+        .patch("/api/reviews/2")
+        .send({
+            inc_votes: 4
+        })
+        .expect(200)
+        .then(({body}) => {
+            expect(body.updatedReview).toEqual({
+                review_id: 2,
+                title: "Jenga",
+                category: "dexterity",
+                designer: "Leslie Scott",
+                owner: "philippaclaire9",
+                review_body: "Fiddly fun for all the family",
+                review_img_url: "https://images.pexels.com/photos/4473494/pexels-photo-4473494.jpeg?w=700&h=700",
+                created_at: "2021-01-18T10:01:41.251Z",
+                votes: 9
+            })
+        })
+    })
+    test("404: if an incorrect review_id is used for the patch request", () => {
+        return request(app)
+        .patch("/api/reviews/24")
+        .send({
+            inc_votes: 4
+        })
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe("ID not found")
+        })
+    })
+    test("400: if a wrongly formatted review_id is provided for the request", () => {
+        return request(app)
+        .patch("/api/reviews/wrong-url")
+        .send({
+            inc_votes: 4
+        })
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Bad request")
+        })
+    })
+    test("400: if a wrongly formatted inc_vote is input", () => {
+        return request(app)
+        .patch("/api/reviews/2")
+        .send({
+            inc_votes: "wrong input"
+        })
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Bad request")
+        })
+    })
+})
+
 
 describe("GET /*", () => {
   test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
