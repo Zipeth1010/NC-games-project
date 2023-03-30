@@ -1,4 +1,4 @@
-const {getCommentByIdModel, checkIfIdExists, insertComment} = require("../Models/comments_models")
+const {getCommentByIdModel, checkIfIdExists, insertComment, deleteCommentModel, checkIfCommentIdExists} = require("../Models/comments_models")
 
 
 function getCommentById(req, res, next) {
@@ -30,4 +30,18 @@ function postCommentById(req, res, next) {
     })
 }
 
-module.exports = {getCommentById, postCommentById}
+function deleteComment(req, res, next) {
+    const comment_id = req.params.comment_id
+
+    checkIfCommentIdExists(comment_id).then(() => {
+        deleteCommentModel(comment_id).then(() => {   
+            res.status(204).send()
+        })
+    })
+    .catch((err) => {
+        next(err)
+    })
+    
+}
+
+module.exports = {getCommentById, postCommentById, deleteComment}
