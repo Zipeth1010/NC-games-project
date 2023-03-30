@@ -34,8 +34,8 @@ function deleteComment(req, res, next) {
     const comment_id = req.params.comment_id
 
     checkIfCommentIdExists(comment_id).then(() => {
-        deleteCommentModel(comment_id).then((comment) => {   
-            res.status(204).send({comment: comment})
+        deleteCommentModel(comment_id).then(() => {   
+            res.status(204).send()
         })
     })
     .catch((err) => {

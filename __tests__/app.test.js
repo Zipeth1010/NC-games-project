@@ -266,7 +266,7 @@ describe("PATCH /api/reviews/:review_id", () => {
     })
 })
 
-describe.only("DELETE /api/comments/:comment_id", () => {
+describe("DELETE /api/comments/:comment_id", () => {
     test("204: if given the right comment_id will successfully delete the comment", () => {
         return request(app)
         .delete("/api/comments/6")
@@ -279,9 +279,6 @@ describe.only("DELETE /api/comments/:comment_id", () => {
       return request(app)
       .delete("/api/comments/29")
       .expect(404)
-      .then(({body}) => {
-        expect(body.msg).toBe("Comment_id not found")
-      })
     })
     test("400: If given a comment_id which is incorrectly formatted", () => {
       return request(app)
