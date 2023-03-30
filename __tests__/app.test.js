@@ -266,6 +266,33 @@ describe("PATCH /api/reviews/:review_id", () => {
     })
 })
 
+describe.only("DELETE /api/comments/:comment_id", () => {
+    test("204: if given the right comment_id will successfully delete the comment", () => {
+        return request(app)
+        .delete("/api/comments/6")
+        .expect(204)
+        .then(({body}) => {
+            expect(body.comment).toBe(undefined)
+        })
+    })
+    test("404: If a comment_id is given which doesn't exist but is correctly formatted", () => {
+      return request(app)
+      .delete("/api/comments/29")
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe("Comment_id not found")
+      })
+    })
+    test("400: If given a comment_id which is incorrectly formatted", () => {
+      return request(app)
+      .delete("/api/comments/wrong-format")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Bad request")
+      })
+    })
+})
+
 
 describe("GET /*", () => {
   test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
