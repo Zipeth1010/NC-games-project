@@ -317,6 +317,69 @@ describe("GET /api/users", () => {
     })
   })
 
+  
+  describe("GET /api/reviews (queries)", () => {
+    test("200: Able to sort a query depending on category", () => {
+      return request(app)
+      .get("/api/reviews?category=social deduction")
+      .expect(200)
+      .then(({body}) => {
+        expect(body.reviews).toHaveLength(11)
+        body.reviews.forEach((review) => {
+          expect(review).toMatchObject({
+            review_id: expect.any(Number),
+            title: expect.any(String),
+            category: "social deduction",
+            designer: expect.any(String),
+            owner: expect.any(String),
+            review_img_url: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number)
+        })
+      })
+      })
+    })
+    test("200: Able to sort by a query depending on the values specified", () => {
+      return request(app)
+      .get("/api/reviews?category=social deduction&sort_by=votes&order=ASC")
+      .expect(200)
+      .then(({body}) => {
+        expect(body.reviews).toHaveLength(11)
+        body.reviews.forEach((review) => {
+          expect(review).toMatchObject({
+            review_id: expect.any(Number),
+            title: expect.any(String),
+            category: "social deduction",
+            designer: expect.any(String),
+            owner: expect.any(String),
+            review_img_url: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number)
+        })
+        })
+        expect(body.reviews).toBeSortedBy("votes", {
+          descending: false
+        })
+      })
+    })
+    test("400: Invalid sort query if an improper sort by query is fed", () => {
+      return request(app)
+      .get("/api/reviews?category=social deduction&sort_by=wronganswer")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Invalid sort query")
+      })
+    })
+    test("400: Invalid order query if improper order query is fed", () => {
+      return request(app)
+      .get("/api/reviews?category=social deduction&sort_by=votes&order=highest")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Invalid order query")
+      })
+    })
+  })
+
 describe("GET /*", () => {
   test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
     return request(app)

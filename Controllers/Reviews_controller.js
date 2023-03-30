@@ -14,10 +14,13 @@ function getReviewById (req, res, next) {
 }
 
 function getReviews(req, res, next) {
-    getReviewsModel().then((reviews) => {
+    console.log(req.query)
+    const {category, sort_by, order} = req.query
+    getReviewsModel(category, sort_by, order).then((reviews) => {
         res.status(200).send({reviews: reviews})
     })
     .catch((err) => {
+        console.log(err)
         next(err)
     })
 }
