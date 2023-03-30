@@ -32,7 +32,6 @@ function postCommentById(req, res, next) {
 
 function deleteComment(req, res, next) {
     const comment_id = req.params.comment_id
-    console.log(comment_id)
 
     checkIfCommentIdExists(comment_id).then(() => {
         deleteCommentModel(comment_id).then((comment) => {   

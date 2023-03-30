@@ -39,17 +39,11 @@ function deleteCommentModel(comment_id) {
     WHERE comment_id = $1
     RETURNING *;`, [comment_id])
     .then((result) => {
-        console.log(result)
         return result.rows
     })
 }
 
 function checkIfCommentIdExists(comment_id){
-    // console.log(comment_id)
-    // const regex = /\d/;
-    // if (regex.test(comment_id) !== true){
-    //     Promise.reject({status: 400, msg: "Bad request"})
-    // }
     return db.query(`
     SELECT * FROM comments WHERE comment_id = $1`, [comment_id])
     .then((result) => {
