@@ -414,6 +414,24 @@ describe("GET /api/users", () => {
     })
   })
 
+  describe("GET /api", () => {
+    test("200: Responds with the contents of the endpoints.json file", () => {
+      return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({body}) => {
+        expect(body.api).toHaveProperty("GET /api")
+        expect(body.api).toHaveProperty("GET /api/reviews")
+        expect(body.api).toHaveProperty("GET /api/reviews/:review_id")
+        expect(body.api).toHaveProperty("GET /api/reviews/:review_id/comments")
+        expect(body.api).toHaveProperty("POST api/reviews/:review_id/comments")
+        expect(body.api).toHaveProperty("PATCH api/reviews/:review_id")
+        expect(body.api).toHaveProperty("DELETE /api/comments/:comment_id")
+        expect(body.api).toHaveProperty("GET /api/users")
+      })
+    })
+  })
+
 describe("GET /*", () => {
   test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
     return request(app)
