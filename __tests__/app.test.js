@@ -378,6 +378,14 @@ describe("GET /api/users", () => {
         expect(body.msg).toBe("Invalid order query")
       })
     })
+    test("404: If a valid query is fed but there is no results found", () => {
+      return request(app)
+      .get("/api/reviews?category=valid request")
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe("Category not found")
+      })
+    })
   })
 
 describe("GET /*", () => {

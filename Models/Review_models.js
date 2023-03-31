@@ -13,7 +13,6 @@ function getReviewByIdModel(id) {
 }
 
 function getReviewsModel(category, sort_by, order) {
-    console.log(category)
     const queryValues = [];
     let queryStr = `SELECT reviews.owner, reviews.title, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, reviews.designer, COUNT(comments.review_id) AS comment_count FROM reviews FULL OUTER JOIN comments ON comments.review_id = reviews.review_id`
     if (category){
@@ -44,6 +43,9 @@ function getReviewsModel(category, sort_by, order) {
     }
     return db.query(queryStr, queryValues)
     .then((result) => {
+        if(result.rowCount === 0){
+            return Promise.reject({status:404, msg: "Category not found"})
+        }
         return result.rows
     })
 }
