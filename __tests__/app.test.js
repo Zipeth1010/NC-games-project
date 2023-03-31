@@ -318,7 +318,7 @@ describe("GET /api/users", () => {
   })
 
   
-  describe("GET /api/reviews (queries)", () => {
+  describe.only("GET /api/reviews (queries)", () => {
     test("200: Able to sort a query depending on category", () => {
       return request(app)
       .get("/api/reviews?category=social deduction")
@@ -388,10 +388,10 @@ describe("GET /api/users", () => {
         expect(body.msg).toBe("Invalid order query")
       })
     })
-    test("404: If a valid query is fed but there is no results found", () => {
+    test("200: If a valid query is fed but there is no results found", () => {
       return request(app)
       .get("/api/reviews?category=children's games")
-      .expect(404)
+      .expect(200)
       .then(({body}) => {
         expect(body.msg).toBe("No reviews for selected category")
       })

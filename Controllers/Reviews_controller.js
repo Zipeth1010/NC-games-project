@@ -21,16 +21,30 @@ function getReviewById(req, res, next) {
 function getReviews(req, res, next) {
   const { category, sort_by, order } = req.query;
 
-  getReviewsModel(category, sort_by, order)
-    .then((reviews) => {
-      if (reviews.length === 0) {
-        return checkIfCategoryExists(category);
-      }
-      res.status(200).send({ reviews: reviews });
-    })
-    .catch((err) => {
+  if (category) {
+    checkIfCategoryExists(category).then(() => {
+      return getReviewsModel(category, sort_by, order)
+        .then((reviews) => {
+          if (reviews.length !== 0) {
+            res.status(200).send({ reviews: reviews });
+          }
+          if (reviews.length === 0) {
+            res.status(200).send({ msg: "No reviews for selected category" });
+          }
+        })
+        ;
+    }).catch((err) => {
       next(err);
     });
+  } else {
+    getReviewsModel(category, sort_by, order)
+      .then((reviews) => {
+        res.status(200).send({ reviews: reviews });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } 
 }
 
 function updateVotes(req, res, next) {
