@@ -29,24 +29,36 @@ function getReviewsModel(category, sort_by, order) {
         return Promise.reject({status: 400, msg: "Invalid order query"})
     }
 }
+if(sort_by && order || !sort_by && order || sort_by && !order || !sort_by && !order){
+    queryStr += ` GROUP BY reviews.review_id ORDER BY reviews.`
+}
     if (sort_by && order){
-        queryStr += ` GROUP BY reviews.review_id ORDER BY reviews.${sort_by} ${order};`
+        queryStr += `${sort_by} ${order};`
     }
     if (sort_by && !order){
-        queryStr += ` GROUP BY reviews.review_id ORDER BY reviews.${sort_by} DESC;`
+        queryStr += `${sort_by} DESC;`
     }
     if (!sort_by && order){
-        queryStr += ` GROUP BY reviews.review_id ORDER BY reviews.created_at ${order};`
+        queryStr += `created_at ${order};`
     }
     if (!sort_by && !order){
-        queryStr += ` GROUP BY reviews.review_id ORDER BY reviews.created_at DESC;`
+        queryStr += `created_at DESC;`
     }
     return db.query(queryStr, queryValues)
     .then((result) => {
-        if(result.rowCount === 0){
-            return Promise.reject({status:404, msg: "Category not found"})
-        }
         return result.rows
+    })
+}
+
+function checkIfCategoryExists(category) {
+    return db.query(`SELECT * FROM categories WHERE slug = $1;`, [category])
+    .then((result) => {
+        console.log(result)
+        if (result.rowCount === 1){
+            return Promise.reject({status: 404, msg: "No reviews for selected category"})
+        } else {
+            return Promise.reject({status: 404, msg: "Category not found"})
+        }
     })
 }
 
@@ -62,4 +74,4 @@ function updateVotesModel(review_id, votesToAdd) {
     })
 }
 
-module.exports = {getReviewByIdModel, getReviewsModel, updateVotesModel}
+module.exports = {getReviewByIdModel, getReviewsModel, updateVotesModel, checkIfCategoryExists}

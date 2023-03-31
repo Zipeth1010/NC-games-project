@@ -318,7 +318,7 @@ describe("GET /api/users", () => {
   })
 
   
-  describe("GET /api/reviews (queries)", () => {
+  describe.only("GET /api/reviews (queries)", () => {
     test("200: Able to sort a query depending on category", () => {
       return request(app)
       .get("/api/reviews?category=social deduction")
@@ -337,6 +337,16 @@ describe("GET /api/users", () => {
             votes: expect.any(Number)
         })
       })
+      })
+    })
+    test("200: Accepts an order query and is defaultly ordered by date", () => {
+      return request(app)
+      .get("/api/reviews?order=ASC")
+      .expect(200)
+      .then(({body}) => {
+        expect(body.reviews).toBeSortedBy("created_at", {
+          descending: false
+        })
       })
     })
     test("200: Able to sort by a query depending on the values specified", () => {
@@ -380,7 +390,15 @@ describe("GET /api/users", () => {
     })
     test("404: If a valid query is fed but there is no results found", () => {
       return request(app)
-      .get("/api/reviews?category=valid request")
+      .get("/api/reviews?category=children's games")
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe("No reviews for selected category")
+      })
+    })
+    test("404: If fed a non existent category", () => {
+      return request(app)
+      .get("/api/reviews?category=non-existent-category")
       .expect(404)
       .then(({body}) => {
         expect(body.msg).toBe("Category not found")
