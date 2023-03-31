@@ -31,7 +31,7 @@ describe("GET /api/categories", () => {
   });
 });
 
-describe.only("GET /api/reviews/:review_id", () => {
+describe("GET /api/reviews/:review_id", () => {
   test("200: Will return an object corresponding to the review ID with all info", () => {
     return request(app)
       .get("/api/reviews/2")
