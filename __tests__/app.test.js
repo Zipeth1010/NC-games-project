@@ -318,7 +318,7 @@ describe("GET /api/users", () => {
   })
 
   
-  describe.only("GET /api/reviews (queries)", () => {
+  describe("GET /api/reviews (queries)", () => {
     test("200: Able to sort a query depending on category", () => {
       return request(app)
       .get("/api/reviews?category=social deduction")
