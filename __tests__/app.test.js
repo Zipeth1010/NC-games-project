@@ -58,6 +58,14 @@ describe("GET /api/reviews/:review_id", () => {
         expect(body.msg).toBe("Bad request");
       });
   });
+  test("200: Will successfully return the correct comment count for input review ID aswell", () => {
+    return request(app)
+    .get("/api/reviews/2")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.review.comment_count).toBe("3")
+    })
+  })
 });
 
 describe("GET api/reviews", () => {

@@ -3,7 +3,8 @@ const format = require("pg-format")
 
 function getReviewByIdModel(id) {
     return db.query(`
-    SELECT * FROM reviews WHERE review_id = $1`, [id])
+    SELECT reviews.*, COUNT(comments.review_id) AS comment_count FROM reviews
+     FULL OUTER JOIN comments ON comments.review_id = reviews.review_id WHERE reviews.review_id = $1 GROUP BY reviews.review_id;`, [id])
     .then((result) => {
         const review = result.rows
         if (review[0] === undefined){
