@@ -53,7 +53,6 @@ if(sort_by && order || !sort_by && order || sort_by && !order || !sort_by && !or
 function checkIfCategoryExists(category) {
     return db.query(`SELECT * FROM categories WHERE slug = $1;`, [category])
     .then((result) => {
-        console.log(result)
         if (result.rowCount === 1){
             return Promise.reject({status: 404, msg: "No reviews for selected category"})
         } else {
