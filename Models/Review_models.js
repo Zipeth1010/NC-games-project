@@ -53,7 +53,9 @@ function getReviewsModel(category, sort_by, order) {
     (sort_by && !order) ||
     (!sort_by && !order)
   ) {
-    queryStr += ` GROUP BY reviews.review_id ORDER BY reviews.`;
+    queryStr += ` GROUP BY reviews.review_id ORDER BY ${
+      sort_by === "comment_count" ? "" : "reviews."
+    }`;
   }
   if (sort_by && order) {
     queryStr += `${sort_by} ${order};`;

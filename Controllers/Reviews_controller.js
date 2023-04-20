@@ -22,20 +22,20 @@ function getReviews(req, res, next) {
   const { category, sort_by, order } = req.query;
 
   if (category) {
-    checkIfCategoryExists(category).then(() => {
-      return getReviewsModel(category, sort_by, order)
-        .then((reviews) => {
+    checkIfCategoryExists(category)
+      .then(() => {
+        return getReviewsModel(category, sort_by, order).then((reviews) => {
           if (reviews.length !== 0) {
             res.status(200).send({ reviews: reviews });
           }
           if (reviews.length === 0) {
             res.status(200).send({ msg: "No reviews for selected category" });
           }
-        })
-        ;
-    }).catch((err) => {
-      next(err);
-    });
+        });
+      })
+      .catch((err) => {
+        next(err);
+      });
   } else {
     getReviewsModel(category, sort_by, order)
       .then((reviews) => {
@@ -44,7 +44,7 @@ function getReviews(req, res, next) {
       .catch((err) => {
         next(err);
       });
-  } 
+  }
 }
 
 function updateVotes(req, res, next) {
