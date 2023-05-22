@@ -9,7 +9,7 @@ There are 3 data types to deal with, users, reviews and comments.\
 The aim for the back-end is to create an API for the future front-end project to communicate with.\
 There will be different endpoints from which HTTP requests will be made and these endpoints will be stated in the app.js file.\
 Using MVC formatting, these requests will be directed and given instructions in how to communicate with the database and what happens in the database/which data is relayed back (if any).\
-Using the hosted api stated above, you can test the backend of the database using the endpoints stated in the app.js, using applications like insomnia.\
+Using the hosted api stated above, you can test the backend of the database using the endpoints stated in the app.js, using applications like insomnia.
 
 ## Requirements
 
