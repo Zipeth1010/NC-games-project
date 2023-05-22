@@ -1,57 +1,34 @@
-# Northcoders House of Games API
+## Link to Hosted Version
 
-## Background
+The address of the hosted api is: https://mark-portfolio-project.onrender.com/api
 
-We will be building an API for the purpose of accessing application data programmatically. The intention here is to mimic the building of a real world backend service (such as reddit) which should provide this information to the front end architecture.
+## Project Summary
 
-Your database will be PSQL, and you will interact with it using [node-postgres](https://node-postgres.com/).
+This project was aimed at building the back-end for a board game review website.\
+There are 3 data types to deal with, users, reviews and comments.\
+The aim for the back-end is to create an API for the future front-end project to communicate with.\
+There will be different endpoints from which HTTP requests will be made and these endpoints will be stated in the app.js file.\
+Using MVC formatting, these requests will be directed and given instructions in how to communicate with the database and what happens in the database/which data is relayed back (if any).\
+Using the hosted api stated above, you can test the backend of the database using the endpoints stated in the app.js.\
 
-## Kanban
+## Requirements
 
-### Link to your Trello Board here: https://trello.com/b/gBtX4GN3/be-nc-games
+In order to run this repository, you must have the latest versions of node and postgres installed:\
+node: v19.6.0\
+postgres: 14.7
 
-To keep track of the tasks involved in this project we're going to use a kanban board. Ensure that you work on one _ticket_ at time. You can click on the ticket to find out more information about what is required for the feature. A ticket is not considered complete unless both the happy path and errors response are handled. You can make use of the checklist on each ticket to keep track of the errors you want to handle. You can also make use of [error-handling.md](error-handling.md) to consider the error codes we may wish to respond with.
+## How to Run Locally
 
-**Please ensure you work through the tickets in numerical order.**
+To run this repository locally, follow these steps:
 
-## Git Branching and Pull Requests
-
-You will be working on each ticket on a new **branch**.
-
-To create and switch to a new git branch use the command:
-
-```
-git checkout -b <new branch name>
-```
-
-This will create a branch and move over to that branch. (Omit the `-b` flag if you wish to switch to an already existing branch).
-
-We recommend that you name the branch after the number assigned to each ticket via the header. eg. `ncnews-1`
-
-When pushing the branch to git hub ensure that you make reference to the branch you are pushing to on the remote.
-
-```
-git push origin <branch name>
-```
-
-From github you can make a pull request and share the link and ticket number via a pull request specific nchelp using the command `nchelp pr`. A tutor will swing by to review your code. Ensure that you keep your trello up to date whilst you await the PR approval. Regular `nchelp` will be available for when you need support.
-
-Once a pull request been accepted be sure to switch back to the main branch and pull down the updated changes.
-
-```
-git checkout main
-
-git pull origin main
-```
-
-You can tidy up your local branches once they have been pull into main by deleting them:
-
-```
-git branch -D <local branch>
-```
-
-## Husky
-
-To ensure we are not commiting broken code this project makes use of git hooks. Git hooks are scripts triggered during certain events in the git lifecycle. Husky is a popular package which allows us to set up and maintain these scripts. This project makes use a _pre-commit hook_. When we attempt to commit our work, the script defined in the `pre-commit` file will run. If any of our tests fail than the commit will be aborted.
-
-The [Husky documentation](https://typicode.github.io/husky/#/) explains how to configure Husky for your own project as well as creating your own custom hooks.\_
+- Firstly, you need to clone the repository. Open the terminal and direct yourself to where you want to store the repo.
+- Run the command 'git clone https://github.com/Zipeth1010/NC-games-project.git'
+- After cloning the repository, cd into it with the following command 'cd be-nc-games'
+- Run 'npm i' to install all of the local packages
+- Run 'npm run seed' to seed create the local database and seed it
+- After the database is created and seeded, you can test the tests written with 'npm test app.test.js'
+- Now the .env files must be created.
+- As you can see from the information in be-nc-games/db/connection.js the test and development database's need to be seperated.
+- The next step, is to create a .env.test file and set the variable 'PGDATABASE = nc_games_test' for example. The name of the database before the '\_test' doesn't matter but the PGDATABASE and \_test must be there.
+- This means that when the app is being tested, it is testing the locally stored data as opposed to the development dataset.
+- If you wish to create a development dataset, make a seperate .env.development file at the same level as the .env.test file.
