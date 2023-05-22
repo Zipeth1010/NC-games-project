@@ -31,4 +31,4 @@ To run this repository locally, follow these steps:
 - As you can see from the information in be-nc-games/db/connection.js the test and development database's need to be seperated.
 - The next step, is to create a .env.test file and set the variable 'PGDATABASE = nc_games_test' for example. The name of the database before the '\_test' doesn't matter but the PGDATABASE and \_test must be there.
 - This means that when the app is being tested, it is testing the locally stored data as opposed to the development dataset.
-- If you wish to create a development dataset, make a seperate .env.development file at the same level as the .env.test file.
+- If you wish to create a development dataset, make a seperate .env.development file at the same level as the .env.test file, and set the variable 'PGDATABASE = nc_games'
