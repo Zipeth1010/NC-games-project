@@ -1,11 +1,30 @@
-const db = require("../db/connection")
+const db = require("../db/connection");
 
 function getUsersModel() {
-    return db.query(`
-    SELECT username, name, avatar_url FROM users;`)
+  return db
+    .query(
+      `
+    SELECT username, name, avatar_url FROM users;`
+    )
     .then((result) => {
-        return result.rows
-    })
+      return result.rows;
+    });
 }
 
-module.exports = {getUsersModel}
+function getUserModel(username) {
+  return db
+    .query(
+      `
+    SELECT username, name, avatar_url FROM users WHERE username = $1`,
+      [username]
+    )
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Username not found!" });
+      }
+      console.log(result.rows);
+      return result.rows[0];
+    });
+}
+
+module.exports = { getUsersModel, getUserModel };
