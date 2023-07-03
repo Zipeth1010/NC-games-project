@@ -412,6 +412,30 @@ describe("GET /api/reviews (queries)", () => {
   });
 });
 
+describe("GET /api/users/:username", () => {
+  test("200: Responds with an object which has username, name and avatar_url properties", () => {
+    return request(app)
+      .get("/api/users/mallionaire")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user).toBeInstanceOf(Object);
+        expect(body.user.name).toBe("haz");
+        expect(body.user.username).toBe("mallionaire");
+        expect(body.user.avatar_url).toBe(
+          "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        );
+      });
+  });
+  test("404: Responds with username not found when searching for an invalid username", () => {
+    return request(app)
+      .get("/api/users/notvalid")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Username not found!");
+      });
+  });
+});
+
 describe("GET /*", () => {
   test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
     return request(app)
