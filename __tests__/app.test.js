@@ -436,6 +436,59 @@ describe("GET /api/users/:username", () => {
   });
 });
 
+describe("PATCH /api/comments/:comment_id", () => {
+  test("200: Object updated when given the right parameters", () => {
+    return request(app)
+      .patch("/api/comments/4")
+      .send({ inc_votes: 1 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.updatedComment).toEqual({
+          comment_id: 4,
+          body: "EPIC board game!",
+          votes: 17,
+          author: "bainesface",
+          review_id: 2,
+          created_at: expect.any(String),
+        });
+      });
+  });
+  test("200: Object also updates correctly given negative inc_votes as a parameter for the patch", () => {
+    return request(app)
+      .patch("/api/comments/3")
+      .send({ inc_votes: -1 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.updatedComment).toEqual({
+          comment_id: 3,
+          body: "I didn't know dogs could play games",
+          votes: 9,
+          author: "philippaclaire9",
+          review_id: 3,
+          created_at: expect.any(String),
+        });
+      });
+  });
+  test("404: Comment not found when inputting an invalid comment_id", () => {
+    return request(app)
+      .patch("/api/comments/10405")
+      .send({ inc_votes: 1 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Comment_id not found");
+      });
+  });
+  test("400: Bad request when given a wrong comment_id type", () => {
+    return request(app)
+      .patch("/api/comments/hi")
+      .send({ inc_votes: -1 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+});
+
 describe("GET /*", () => {
   test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
     return request(app)
