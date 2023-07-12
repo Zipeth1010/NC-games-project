@@ -100,9 +100,33 @@ function updateVotesModel(review_id, votesToAdd) {
     });
 }
 
+function postReviewModel(
+  owner,
+  title,
+  review_body,
+  designer,
+  category,
+  review_img_url
+) {
+  return db
+    .query(
+      `
+    INSERT INTO reviews
+    (owner, title, review_body, designer, category, review_img_url)
+    VALUES 
+    ($1, $2, $3, $4, $5, $6)
+    RETURNING *;`,
+      [owner, title, review_body, designer, category, review_img_url]
+    )
+    .then((result) => {
+      return result.rows[0];
+    });
+}
+
 module.exports = {
   getReviewByIdModel,
   getReviewsModel,
   updateVotesModel,
   checkIfCategoryExists,
+  postReviewModel,
 };

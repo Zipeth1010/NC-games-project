@@ -489,6 +489,53 @@ describe("PATCH /api/comments/:comment_id", () => {
   });
 });
 
+describe.only("Post /api/reviews", () => {
+  test("200: When given the right object, posts a review", () => {
+    return request(app)
+      .post("/api/reviews")
+      .send({
+        owner: "philippaclaire9",
+        title: "This game absolutely sucks",
+        review_body: "Never before have I ever played a game this terrible",
+        designer: "Lezzie Magie",
+        category: "children's games",
+        review_img_url:
+          "https://www.dexy.co.rs/files/images/slike_proizvoda/media/C10/C1009/images/C1009.jpg",
+      })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.review).toMatchObject({
+          owner: expect.any(String),
+          title: expect.any(String),
+          review_body: expect.any(String),
+          designer: expect.any(String),
+          category: expect.any(String),
+          review_img_url: expect.any(String),
+          review_id: expect.any(Number),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+        });
+      });
+  });
+  test("404: Not found when making requests with invalid information", () => {
+    return request(app)
+      .post("/api/reviews")
+      .send({
+        owner: "Fake user 123",
+        title: "Testing user",
+        review_body: "Testing user",
+        designer: "Lezzie Magie",
+        category: "children's games",
+        review_img_url:
+          "https://www.dexy.co.rs/files/images/slike_proizvoda/media/C10/C1009/images/C1009.jpg",
+      })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Username not found");
+      });
+  });
+});
+
 describe("GET /*", () => {
   test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
     return request(app)

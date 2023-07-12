@@ -3,6 +3,8 @@ const { getCategories } = require("./Controllers/categories_controllers");
 const {
   getReviewById,
   getReviews,
+  updateVotes,
+  postReview,
 } = require("./Controllers/Reviews_controller");
 const db = require("./db/connection");
 const {
@@ -16,7 +18,6 @@ const {
   deleteComment,
   patchComment,
 } = require("./Controllers/comments_controller");
-const { updateVotes } = require("./Controllers/Reviews_controller");
 const { getUsers, getUser } = require("./Controllers/Users_controller");
 const cors = require("cors");
 
@@ -45,6 +46,8 @@ app.get("/api/users", getUsers);
 app.get("/api/users/:username", getUser);
 
 app.patch("/api/comments/:comment_id", patchComment);
+
+app.post("/api/reviews", postReview);
 
 app.use("/*", (req, res) => {
   res.status(404).send({ msg: "Path not found" });
