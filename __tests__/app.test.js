@@ -534,6 +534,40 @@ describe.only("Post /api/reviews", () => {
         expect(body.msg).toBe("Username not found");
       });
   });
+  test("400: Bad request when making requests with empty sections", () => {
+    return request(app)
+      .post("/api/reviews")
+      .send({
+        owner: "philippaclaire9",
+        title: "",
+        review_body: "",
+        designer: "Lezzie Magie",
+        category: "children's games",
+        review_img_url:
+          "https://www.dexy.co.rs/files/images/slike_proizvoda/media/C10/C1009/images/C1009.jpg",
+      })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+  test("404: Not found if given a category that doesn't already exist", () => {
+    return request(app)
+      .post("/api/reviews")
+      .send({
+        owner: "philippaclaire9",
+        title: "Category testing",
+        review_body: "Testing for category errors",
+        designer: "Lezzie Magie",
+        category: "Nonexisting category",
+        review_img_url:
+          "https://www.dexy.co.rs/files/images/slike_proizvoda/media/C10/C1009/images/C1009.jpg",
+      })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Category not found");
+      });
+  });
 });
 
 describe("GET /*", () => {

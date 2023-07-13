@@ -68,9 +68,22 @@ function postReview(req, res, next) {
   const { owner, title, review_body, designer, category, review_img_url } =
     req.body;
 
-  postReviewModel(owner, title, review_body, designer, category, review_img_url)
-    .then((review) => {
-      res.status(200).send({ review: review });
+  checkIfCategoryExists(category)
+    .then(() => {
+      postReviewModel(
+        owner,
+        title,
+        review_body,
+        designer,
+        category,
+        review_img_url
+      )
+        .then((review) => {
+          res.status(200).send({ review: review });
+        })
+        .catch((err) => {
+          next(err);
+        });
     })
     .catch((err) => {
       next(err);
