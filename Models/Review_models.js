@@ -134,10 +134,43 @@ function postReviewModel(
   }
 }
 
+function checkIfReviewExists(review_id) {
+  return db
+    .query(
+      `
+    SELECT * FROM reviews WHERE review_id = $1;
+    `,
+      [review_id]
+    )
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "ID not found" });
+      } else {
+        return result.rows[0];
+      }
+    });
+}
+
+function deleteReviewModel(review_id) {
+  return db
+    .query(
+      `
+DELETE FROM reviews
+WHERE review_id = $1
+RETURNING *;`,
+      [review_id]
+    )
+    .then((response) => {
+      return response.rows[0];
+    });
+}
+
 module.exports = {
   getReviewByIdModel,
   getReviewsModel,
   updateVotesModel,
   checkIfCategoryExists,
   postReviewModel,
+  deleteReviewModel,
+  checkIfReviewExists,
 };
