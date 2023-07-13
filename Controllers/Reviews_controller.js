@@ -4,6 +4,7 @@ const {
   getReviewsModel,
   updateVotesModel,
   checkIfCategoryExists,
+  postReviewModel,
 } = require("../Models/Review_models");
 
 function getReviewById(req, res, next) {
@@ -63,4 +64,30 @@ function updateVotes(req, res, next) {
     });
 }
 
-module.exports = { getReviewById, getReviews, updateVotes };
+function postReview(req, res, next) {
+  const { owner, title, review_body, designer, category, review_img_url } =
+    req.body;
+
+  checkIfCategoryExists(category)
+    .then(() => {
+      postReviewModel(
+        owner,
+        title,
+        review_body,
+        designer,
+        category,
+        review_img_url
+      )
+        .then((review) => {
+          res.status(200).send({ review: review });
+        })
+        .catch((err) => {
+          next(err);
+        });
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
+
+module.exports = { getReviewById, getReviews, updateVotes, postReview };
