@@ -489,7 +489,7 @@ describe("PATCH /api/comments/:comment_id", () => {
   });
 });
 
-describe.only("Post /api/reviews", () => {
+describe("Post /api/reviews", () => {
   test("200: When given the right object, posts a review", () => {
     return request(app)
       .post("/api/reviews")
