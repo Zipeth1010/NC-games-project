@@ -5,6 +5,7 @@ const {
   getReviews,
   updateVotes,
   postReview,
+  deleteReview,
 } = require("./Controllers/Reviews_controller");
 const db = require("./db/connection");
 const {
@@ -48,6 +49,8 @@ app.get("/api/users/:username", getUser);
 app.patch("/api/comments/:comment_id", patchComment);
 
 app.post("/api/reviews", postReview);
+
+app.delete("/api/reviews/:review_id", deleteReview);
 
 app.use("/*", (req, res) => {
   res.status(404).send({ msg: "Path not found" });

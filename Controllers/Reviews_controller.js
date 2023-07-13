@@ -5,6 +5,8 @@ const {
   updateVotesModel,
   checkIfCategoryExists,
   postReviewModel,
+  deleteReviewModel,
+  checkIfReviewExists,
 } = require("../Models/Review_models");
 
 function getReviewById(req, res, next) {
@@ -90,4 +92,28 @@ function postReview(req, res, next) {
     });
 }
 
-module.exports = { getReviewById, getReviews, updateVotes, postReview };
+function deleteReview(req, res, next) {
+  const { review_id } = req.params;
+
+  checkIfReviewExists(review_id)
+    .then(() => {
+      deleteReviewModel(review_id)
+        .then(() => {
+          res.status(204).send();
+        })
+        .catch((err) => {
+          next(err);
+        });
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
+
+module.exports = {
+  getReviewById,
+  getReviews,
+  updateVotes,
+  postReview,
+  deleteReview,
+};

@@ -570,6 +570,33 @@ describe("Post /api/reviews", () => {
   });
 });
 
+describe("DELETE /api/reviews/:review_id", () => {
+  test("204: Content deleted", () => {
+    return request(app)
+      .delete("/api/reviews/4")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body.review).toBe(undefined);
+      });
+  });
+  test("404: Not found when given a review id which doesn't exist", () => {
+    return request(app)
+      .delete("/api/reviews/1094032")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("ID not found");
+      });
+  });
+  test("400: Bad request when given an invalid review id", () => {
+    return request(app)
+      .delete("/api/reviews/wrong-format")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+});
+
 describe("GET /*", () => {
   test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
     return request(app)
