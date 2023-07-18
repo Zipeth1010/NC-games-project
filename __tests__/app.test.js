@@ -597,6 +597,55 @@ describe("DELETE /api/reviews/:review_id", () => {
   });
 });
 
+describe.only("POST /api/users", () => {
+  test("201: User created successfully when the right parameters are given", () => {
+    return request(app)
+      .post("/api/users")
+      .send({
+        username: "Zipeth",
+        name: "Mark",
+        avatar_url:
+          "https://pbs.twimg.com/media/Eks9cbGXgAEPIXv?format=jpg&name=large",
+      })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.user).toEqual({
+          username: "Zipeth",
+          name: "Mark",
+          avatar_url:
+            "https://pbs.twimg.com/media/Eks9cbGXgAEPIXv?format=jpg&name=large",
+        });
+      });
+  });
+  test("403: Username taken", () => {
+    return request(app)
+      .post("/api/users")
+      .send({
+        username: "mallionaire",
+        name: "haz",
+        avatar_url:
+          "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+      })
+      .expect(403)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Username is taken!");
+      });
+  });
+  test("400: Bad request when trying to make an account with no name or username", () => {
+    return request(app)
+      .post("/api/users")
+      .send({
+        username: "",
+        name: "",
+        avatar_url: null,
+      })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Username and name are required");
+      });
+  });
+});
+
 describe("GET /*", () => {
   test("404: If there is an error with spelling, the response is 404 with the message 'Path not found'.", () => {
     return request(app)

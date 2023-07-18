@@ -26,4 +26,51 @@ function getUserModel(username) {
     });
 }
 
-module.exports = { getUsersModel, getUserModel };
+function checkIfUserExists(username) {
+  return db
+    .query(
+      `
+  SELECT * FROM users WHERE username = $1;`,
+      [username]
+    )
+    .then((response) => {
+      if (response.rows.length === 1) {
+        return Promise.reject({ status: 403, msg: "Username is taken!" });
+      } else {
+        console.log(response.rows);
+        return response.rows;
+      }
+    });
+}
+
+function postUserModel(username, name, avatar_url) {
+  if (username === "" || username === null || name === "" || name === null) {
+    return Promise.reject({
+      status: 400,
+      msg: "Username and name are required",
+    });
+  } else {
+    return db
+      .query(
+        `
+    INSERT INTO users
+    (username, name, avatar_url)
+    VALUES ($1, $2, $3)
+    RETURNING *;`,
+        [username, name, avatar_url]
+      )
+      .then((res) => {
+        return res.rows[0];
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+}
+
+module.exports = {
+  getUsersModel,
+  getUserModel,
+  postUserModel,
+  checkIfUserExists,
+};

@@ -1,4 +1,9 @@
-const { getUsersModel, getUserModel } = require("../Models/Users_models");
+const {
+  getUsersModel,
+  getUserModel,
+  postUserModel,
+  checkIfUserExists,
+} = require("../Models/Users_models");
 
 function getUsers(req, res, next) {
   getUsersModel()
@@ -21,4 +26,23 @@ function getUser(req, res, next) {
     });
 }
 
-module.exports = { getUsers, getUser };
+function postUser(req, res, next) {
+  const { username, name, avatar_url } = req.body;
+
+  checkIfUserExists(username)
+    .then(() => {
+      postUserModel(username, name, avatar_url)
+        .then((user) => {
+          res.status(201).send({ user: user });
+        })
+        .catch((err) => {
+          next(err);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
+}
+
+module.exports = { getUsers, getUser, postUser };
