@@ -597,7 +597,7 @@ describe("DELETE /api/reviews/:review_id", () => {
   });
 });
 
-describe.only("POST /api/users", () => {
+describe("POST /api/users", () => {
   test("201: User created successfully when the right parameters are given", () => {
     return request(app)
       .post("/api/users")
